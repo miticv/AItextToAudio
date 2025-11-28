@@ -1,0 +1,5 @@
+{
+  "name": "Gemini TTS Studio",
+  "description": "A high-quality text-to-speech application using Gemini 2.5 Flash TTS model with multiple voice options and real-time audio visualization.",
+  "requestFramePermissions": []
+}

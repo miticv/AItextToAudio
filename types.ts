@@ -1,0 +1,73 @@
+
+export enum VoiceName {
+  Achernar = 'Achernar',
+  Achird = 'Achird',
+  Algenib = 'Algenib',
+  Algieba = 'Algieba',
+  Alnilam = 'Alnilam',
+  Aoede = 'Aoede',
+  Autonoe = 'Autonoe',
+  Callirrhoe = 'Callirrhoe',
+  Charon = 'Charon',
+  Despina = 'Despina',
+  Enceladus = 'Enceladus',
+  Erinome = 'Erinome',
+  Fenrir = 'Fenrir',
+  Gacrux = 'Gacrux',
+  Iapetus = 'Iapetus',
+  Kore = 'Kore',
+  Laomedeia = 'Laomedeia',
+  Leda = 'Leda',
+  Orus = 'Orus',
+  Puck = 'Puck',
+  Pulcherrima = 'Pulcherrima',
+  Rasalgethi = 'Rasalgethi',
+  Sadachbia = 'Sadachbia',
+  Sadaltager = 'Sadaltager',
+  Schedar = 'Schedar',
+  Sulafat = 'Sulafat',
+  Umbriel = 'Umbriel',
+  Vindemiatrix = 'Vindemiatrix',
+  Zephyr = 'Zephyr',
+  Zubenelgenubi = 'Zubenelgenubi',
+}
+
+export const VOICE_LABELS: Record<VoiceName, string> = {
+  [VoiceName.Achernar]: 'Achernar (Female)',
+  [VoiceName.Achird]: 'Achird (Male)',
+  [VoiceName.Algenib]: 'Algenib (Male)',
+  [VoiceName.Algieba]: 'Algieba (Male)',
+  [VoiceName.Alnilam]: 'Alnilam (Male)',
+  [VoiceName.Aoede]: 'Aoede (Female)',
+  [VoiceName.Autonoe]: 'Autonoe (Female)',
+  [VoiceName.Callirrhoe]: 'Callirrhoe (Female)',
+  [VoiceName.Charon]: 'Charon (Male)',
+  [VoiceName.Despina]: 'Despina (Female)',
+  [VoiceName.Enceladus]: 'Enceladus (Male)',
+  [VoiceName.Erinome]: 'Erinome (Female)',
+  [VoiceName.Fenrir]: 'Fenrir (Male)',
+  [VoiceName.Gacrux]: 'Gacrux (Female)',
+  [VoiceName.Iapetus]: 'Iapetus (Male)',
+  [VoiceName.Kore]: 'Kore (Female)',
+  [VoiceName.Laomedeia]: 'Laomedeia (Female)',
+  [VoiceName.Leda]: 'Leda (Female)',
+  [VoiceName.Orus]: 'Orus (Male)',
+  [VoiceName.Puck]: 'Puck (Female)',
+  [VoiceName.Pulcherrima]: 'Pulcherrima (Female)',
+  [VoiceName.Rasalgethi]: 'Rasalgethi (Male)',
+  [VoiceName.Sadachbia]: 'Sadachbia (Male)',
+  [VoiceName.Sadaltager]: 'Sadaltager (Male)',
+  [VoiceName.Schedar]: 'Schedar (Male)',
+  [VoiceName.Sulafat]: 'Sulafat (Female)',
+  [VoiceName.Umbriel]: 'Umbriel (Male)',
+  [VoiceName.Vindemiatrix]: 'Vindemiatrix (Female)',
+  [VoiceName.Zephyr]: 'Zephyr (Female)',
+  [VoiceName.Zubenelgenubi]: 'Zubenelgenubi (Male)',
+};
+
+export interface TTSState {
+  isLoading: boolean;
+  isPlaying: boolean;
+  error: string | null;
+  audioBuffer: AudioBuffer | null;
+}
