@@ -19,7 +19,7 @@ interface ToolbarButtonProps {
 }
 
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, label, icon, emoji, variant = 'default', disabled = false }) => {
-  const baseClasses = "flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors whitespace-nowrap";
+  const baseClasses = "flex items-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium transition-colors whitespace-nowrap";
   const variants = {
     default: "bg-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300",
     outline: "border border-slate-600 hover:bg-slate-700 text-slate-300",
@@ -195,7 +195,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
     <>
       <div className="flex flex-col h-full min-h-[500px] bg-slate-800 rounded-2xl border border-slate-700 shadow-xl overflow-hidden flex-1 relative">
         <div className="bg-slate-900/50 p-2 border-b border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2 flex-1">
             
             {/* Undo/Redo Group */}
             <div className="flex bg-slate-800 rounded-lg p-1 gap-1 border border-slate-700">
@@ -213,14 +213,10 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
                 />
             </div>
 
-            <div className="w-px h-6 bg-slate-700 mx-1 shrink-0"></div>
-
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide ml-1 mr-1 shrink-0">Insert:</span>
-            
             <div className="flex bg-slate-800 rounded-lg p-1 gap-1 border border-slate-700">
               <ToolbarButton 
                 onClick={() => insertTag('<break time="1s" />')} 
-                label="Pause 1s" 
+                label="1s" 
                 icon={<svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
               />
                <ToolbarButton 
@@ -229,8 +225,6 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
               />
             </div>
 
-            <div className="w-px h-6 bg-slate-700 mx-1 shrink-0"></div>
-
             <div className="flex bg-slate-800 rounded-lg p-1 gap-1 border border-slate-700">
               <ToolbarButton onClick={() => insertTag('<whisper>', '</whisper>')} label="Whisper" emoji="🤫" />
               <ToolbarButton onClick={() => insertTag('<happy>', '</happy>')} label="Happy" emoji="😊" />
@@ -238,12 +232,10 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
                <ToolbarButton onClick={() => insertTag('<excited>', '</excited>')} label="Excited" emoji="🤩" />
             </div>
 
-            <div className="w-px h-6 bg-slate-700 mx-1 shrink-0"></div>
-
             <div className="flex bg-slate-800 rounded-lg p-1 gap-1 border border-slate-700">
               <ToolbarButton 
                 onClick={() => insertTag('<sub alias="pronunciation">', '</sub>')} 
-                label="Read As" 
+                label="Alias" 
                 emoji="🗣️" 
               />
               <ToolbarButton 
@@ -254,7 +246,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
             </div>
           </div>
           
-          <div className="flex items-center gap-3 shrink-0 mr-2">
+          <div className="flex items-center gap-3 shrink-0 mr-2 pt-1 sm:pt-0">
              <div className="hidden sm:block text-xs text-slate-500">
               {value.length} chars
             </div>
