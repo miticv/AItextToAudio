@@ -12,8 +12,68 @@ const DEFAULT_TEXT = `Natural voice
 <sad>Sad voice</sad><break time="1s" />
 <excited>Excited voice</excited>`;
 
+// Custom hook for history management
+const useHistory = (initialState: string) => {
+  const [history, setHistory] = useState({
+    past: [] as string[],
+    present: initialState,
+    future: [] as string[]
+  });
+
+  const canUndo = history.past.length > 0;
+  const canRedo = history.future.length > 0;
+
+  const undo = useCallback(() => {
+    setHistory(curr => {
+      if (curr.past.length === 0) return curr;
+      const previous = curr.past[curr.past.length - 1];
+      const newPast = curr.past.slice(0, -1);
+      return {
+        past: newPast,
+        present: previous,
+        future: [curr.present, ...curr.future]
+      };
+    });
+  }, []);
+
+  const redo = useCallback(() => {
+    setHistory(curr => {
+      if (curr.future.length === 0) return curr;
+      const next = curr.future[0];
+      const newFuture = curr.future.slice(1);
+      return {
+        past: [...curr.past, curr.present],
+        present: next,
+        future: newFuture
+      };
+    });
+  }, []);
+
+  const set = useCallback((newPresent: string) => {
+    setHistory(curr => {
+      if (curr.present === newPresent) return curr;
+      return {
+        past: [...curr.past, curr.present],
+        present: newPresent,
+        future: []
+      };
+    });
+  }, []);
+
+  return { 
+    value: history.present, 
+    setValue: set, 
+    undo, 
+    redo, 
+    canUndo, 
+    canRedo 
+  };
+};
+
 const App: React.FC = () => {
-  const [text, setText] = useState<string>(DEFAULT_TEXT);
+  // Use history hook instead of simple useState
+  const { value: text, setValue: setText, undo, redo, canUndo, canRedo } = useHistory(DEFAULT_TEXT);
+  
   const [voice, setVoice] = useState<VoiceName>(VoiceName.Kore);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -168,7 +228,14 @@ const App: React.FC = () => {
           
           {/* Left Column: Script Editor */}
           <div className="lg:col-span-2 flex flex-col">
-             <ScriptEditor value={text} onChange={setText} />
+             <ScriptEditor 
+               value={text} 
+               onChange={setText}
+               onUndo={undo}
+               onRedo={redo}
+               canUndo={canUndo}
+               canRedo={canRedo}
+             />
           </div>
 
           {/* Right Column: Visualization & Status */}

@@ -1,9 +1,12 @@
-
 import React, { useRef, useState } from 'react';
 
 interface ScriptEditorProps {
   value: string;
   onChange: (value: string) => void;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
 }
 
 interface ToolbarButtonProps {
@@ -12,22 +15,26 @@ interface ToolbarButtonProps {
   icon?: React.ReactNode;
   emoji?: string;
   variant?: 'default' | 'outline' | 'ghost'; 
+  disabled?: boolean;
 }
 
-const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, label, icon, emoji, variant = 'default' }) => {
+const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, label, icon, emoji, variant = 'default', disabled = false }) => {
   const baseClasses = "flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors whitespace-nowrap";
   const variants = {
     default: "bg-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300",
     outline: "border border-slate-600 hover:bg-slate-700 text-slate-300",
     ghost: "hover:bg-slate-700/50 text-slate-400 hover:text-white"
   };
+  
+  const disabledClasses = "opacity-50 cursor-not-allowed pointer-events-none";
 
   return (
     <button
       onClick={onClick}
-      className={`${baseClasses} ${variants[variant]}`}
+      disabled={disabled}
+      className={`${baseClasses} ${variants[variant]} ${disabled ? disabledClasses : ''}`}
       type="button"
-      title={`Insert ${label}`}
+      title={label}
     >
       {emoji && <span>{emoji}</span>}
       {icon}
@@ -130,7 +137,14 @@ const HelpModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen,
   );
 };
 
-const ScriptEditor: React.FC<ScriptEditorProps> = ({ value, onChange }) => {
+const ScriptEditor: React.FC<ScriptEditorProps> = ({ 
+  value, 
+  onChange, 
+  onUndo, 
+  onRedo, 
+  canUndo = false, 
+  canRedo = false 
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [showHelp, setShowHelp] = useState(false);
 
@@ -158,12 +172,50 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ value, onChange }) => {
     }, 0);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Check for Ctrl+Z
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      e.preventDefault();
+      if (e.shiftKey) {
+        // Ctrl+Shift+Z = Redo
+        if (onRedo && canRedo) onRedo();
+      } else {
+        // Ctrl+Z = Undo
+        if (onUndo && canUndo) onUndo();
+      }
+    }
+    // Check for Ctrl+Y = Redo
+    else if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+      e.preventDefault();
+      if (onRedo && canRedo) onRedo();
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col h-full min-h-[500px] bg-slate-800 rounded-2xl border border-slate-700 shadow-xl overflow-hidden flex-1 relative">
         <div className="bg-slate-900/50 p-2 border-b border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0 flex-1">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide ml-2 mr-2 shrink-0">Insert:</span>
+            
+            {/* Undo/Redo Group */}
+            <div className="flex bg-slate-800 rounded-lg p-1 gap-1 border border-slate-700">
+               <ToolbarButton 
+                  onClick={() => onUndo?.()} 
+                  label="Undo" 
+                  icon={<svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>}
+                  disabled={!canUndo}
+                />
+               <ToolbarButton 
+                  onClick={() => onRedo?.()} 
+                  label="Redo" 
+                  icon={<svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" /></svg>}
+                  disabled={!canRedo}
+                />
+            </div>
+
+            <div className="w-px h-6 bg-slate-700 mx-1 shrink-0"></div>
+
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide ml-1 mr-1 shrink-0">Insert:</span>
             
             <div className="flex bg-slate-800 rounded-lg p-1 gap-1 border border-slate-700">
               <ToolbarButton 
@@ -223,6 +275,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ value, onChange }) => {
           className="flex-1 w-full bg-slate-800 p-4 text-slate-200 placeholder-slate-600 resize-none focus:outline-none font-mono text-sm leading-relaxed"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Enter your script here. Use the toolbar to add speech instructions..."
           spellCheck={false}
         />
