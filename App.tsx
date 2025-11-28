@@ -6,7 +6,8 @@ import Controls from './components/Controls';
 import Visualizer from './components/Visualizer';
 import ScriptEditor from './components/ScriptEditor';
 
-const DEFAULT_TEXT = `<whisper>Whisper voice</whisper><break time="1s" />
+const DEFAULT_TEXT = `Natural voice
+<whisper>Whisper voice</whisper><break time="1s" />
 <happy>Happy voice</happy><break time="1s" />
 <sad>Sad voice</sad><break time="1s" />
 <excited>Excited voice</excited>`;

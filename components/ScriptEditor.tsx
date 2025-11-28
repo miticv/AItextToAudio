@@ -1,3 +1,4 @@
+
 import React, { useRef, useState } from 'react';
 
 interface ScriptEditorProps {
@@ -92,6 +93,10 @@ const HelpModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen,
               Wrap text in style tags to change the tone of the voice.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="bg-slate-900 p-3 rounded border border-slate-700">
+                <code className="text-blue-300">Normal (Default)</code>
+                <p className="text-xs mt-1 text-slate-500">Natural, balanced speaking tone.</p>
+              </div>
               <div className="bg-slate-900 p-3 rounded border border-slate-700">
                 <code className="text-yellow-300">&lt;whisper&gt;...&lt;/whisper&gt;</code>
                 <p className="text-xs mt-1 text-slate-500">Soft, whispered speech.</p>
